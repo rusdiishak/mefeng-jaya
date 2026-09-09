@@ -166,7 +166,7 @@ INSERT INTO site_content (content_key, content_value)
 SELECT 'stat_1', '01|Fokus pada pendidikan berkualitas'
 WHERE NOT EXISTS (SELECT 1 FROM site_content WHERE content_key = 'stat_1');
 INSERT INTO site_content (content_key, content_value)
-SELECT 'stat_2', '∞|Ruang untuk setiap mimpi'
+SELECT 'stat_2', CONCAT(CONVERT(0xE2889E USING utf8mb4), '|Ruang untuk setiap mimpi')
 WHERE NOT EXISTS (SELECT 1 FROM site_content WHERE content_key = 'stat_2');
 INSERT INTO site_content (content_key, content_value)
 SELECT 'stat_3', '1|Komunitas belajar: SMP Mefeng'
