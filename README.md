@@ -1,6 +1,6 @@
 # Website Portfolio Yayasan Mefeng Jaya
 
-Template portfolio standalone berbahasa Indonesia menggunakan HTML, CSS, JavaScript vanilla, PHP, dan MySQL. Frontend tetap menampilkan data demo apabila API belum aktif.
+Template portfolio berbahasa Indonesia menggunakan HTML, CSS, JavaScript vanilla, PHP, dan MySQL. Seluruh konten halaman dimuat dari database melalui API.
 
 ## Menjalankan dengan XAMPP
 
@@ -12,11 +12,11 @@ Template portfolio standalone berbahasa Indonesia menggunakan HTML, CSS, JavaScr
 
 ## Struktur
 
-- `index.html` — halaman utama dengan Home, About, Gallery, Contact, form Messages, dan footer.
+- `index.html` — kerangka halaman utama; teks dan data diisi dari database oleh JavaScript.
 - `styles.css` — desain responsif, aksesibel, serta animasi ringan pada link media sosial.
 - `script.js` — menu mobile, fetch profile/gallery dari database, modal, validasi, dan pengiriman form.
 - `api/config.php` — konfigurasi PDO lokal.
-- `api/data.php` — endpoint `GET ?route=profile`, `GET ?route=gallery`, dan `POST ?route=messages`.
-- `schema.sql` — schema dan data awal database phpMyAdmin.
+- `api/data.php` — endpoint `GET ?route=page`, `GET ?route=profile`, `GET ?route=gallery`, dan `POST ?route=messages`.
+- `schema.sql` — schema dan data awal database phpMyAdmin, termasuk tabel `site_content`.
 
-Media sosial pada template menggunakan tautan contoh. Ganti URL Instagram, Facebook, dan YouTube pada `index.html` dengan akun resmi yayasan.
+Ubah teks halaman pada tabel `site_content`, data kontak dan tautan media sosial pada tabel `contact_settings`, serta data galeri pada tabel `gallery`.

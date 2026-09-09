@@ -1,11 +1,4 @@
 const API_URL = "api/data.php";
-const demoGallery = [
-  { title: "Belajar bersama di SMP Mefeng", description: "Ruang kelas yang penuh cerita", image: "" },
-  { title: "Kegiatan kreatif siswa", description: "Berani berkreasi", image: "" },
-  { title: "Komunitas yang saling mendukung", description: "Tumbuh bersama", image: "" }
-];
-
-document.getElementById("current-year").textContent = new Date().getFullYear();
 
 // Mencegah aksi inspeksi yang umum tanpa mengganggu input formulir.
 document.addEventListener("contextmenu", (event) => event.preventDefault());
@@ -89,34 +82,59 @@ function renderGallery(items) {
   }).join("");
 }
 
-function renderProfile(profile) {
-  if (!profile) return;
-  const profileFields = {
-    "profile-description": profile.description,
-    "profile-tagline": profile.tagline,
-    "profile-email": profile.email,
-    "profile-phone": profile.phone,
-    "profile-address": profile.address
-  };
-  Object.entries(profileFields).forEach(([id, value]) => {
-    const element = document.getElementById(id);
-    if (element && value) element.textContent = value;
+function renderPage(page) {
+  const { content, profile, contact, gallery } = page;
+  Object.entries(content).forEach(([key, value]) => {
+    document.querySelectorAll(`[data-content="${key}"]`).forEach((element) => {
+      element.innerHTML = value;
+    });
   });
-  const emailLink = document.getElementById("profile-email-link");
-  const phoneLink = document.getElementById("profile-phone-link");
-  if (emailLink && profile.email) emailLink.href = `mailto:${profile.email}`;
-  if (phoneLink && profile.phone) phoneLink.href = `tel:${profile.phone.replace(/[^\d+]/g, "")}`;
+  const proof = String(content.hero_proof || "").split("|");
+  document.querySelector('[data-content="hero_proof_strong"]').textContent = proof[0] || "";
+  document.querySelector('[data-content="hero_proof_text"]').textContent = proof[1] || "";
+  ["stat_1", "stat_2", "stat_3"].forEach((key) => {
+    const [value, text] = String(content[key] || "").split("|");
+    document.querySelector(`[data-stat="${key}_value"]`).textContent = value || "";
+    document.querySelector(`[data-stat="${key}_text"]`).textContent = text || "";
+  });
+  document.getElementById("meta-description").content = content.meta_description || "";
+  document.getElementById("page-title").textContent = content.page_title || "";
+  document.getElementById("footer-text").textContent = contact.footer_text || "";
+  document.getElementById("skip-link").textContent = content.skip_link || "";
+  document.querySelector(".stats").setAttribute("aria-label", content.stats_label || "");
+  document.querySelector(".site-header nav").setAttribute("aria-label", content.nav_home || "");
+  document.querySelector(".brand").setAttribute("aria-label", content.brand_name || "");
+  document.querySelector(".hero-art").setAttribute("aria-label", content.hero_description || "");
+  document.querySelector(".social-links").setAttribute("aria-label", content.brand_name || "");
+  document.querySelector(".map-card").setAttribute("aria-label", content.map_name || "");
+  document.querySelector(".map-card iframe").title = content.map_name || "";
+  document.querySelector(".modal-close").setAttribute("aria-label", content.nav_message || "");
+
+  if (profile) {
+    document.getElementById("profile-description").textContent = profile.description || content.hero_description || "";
+    document.getElementById("profile-tagline").textContent = profile.tagline || content.contact_intro || "";
+    document.getElementById("profile-email").textContent = profile.email || contact.email || "";
+    document.getElementById("profile-phone").textContent = profile.phone || contact.phone || "";
+    document.getElementById("profile-address").textContent = profile.address || contact.address || "";
+    document.getElementById("profile-email-link").href = `mailto:${profile.email || contact.email || ""}`;
+    document.getElementById("profile-phone-link").href = `tel:${(profile.phone || contact.phone || "").replace(/[^\d+]/g, "")}`;
+  }
+  if (contact) {
+    document.getElementById("instagram-link").href = contact.instagram_url || "";
+    document.getElementById("facebook-link").href = contact.facebook_url || "";
+    document.getElementById("youtube-link").href = contact.youtube_url || "";
+    document.getElementById("instagram-link").setAttribute("aria-label", content.social_instagram_label || "");
+    document.getElementById("facebook-link").setAttribute("aria-label", content.social_facebook_label || "");
+    document.getElementById("youtube-link").setAttribute("aria-label", content.social_youtube_label || "");
+    document.getElementById("map-frame").src = contact.map_url || "";
+  }
+  renderGallery(gallery);
 }
 
-fetch(`${API_URL}?route=profile`)
-  .then((response) => response.ok ? response.json() : Promise.reject(new Error("API tidak tersedia")))
-  .then((data) => renderProfile(data.profile))
-  .catch((error) => console.warn("Data profile tidak dapat dimuat:", error));
-
-fetch(`${API_URL}?route=gallery`)
-  .then((response) => response.ok ? response.json() : Promise.reject(new Error("API tidak tersedia")))
-  .then((data) => Array.isArray(data.gallery) && data.gallery.length ? renderGallery(data.gallery) : renderGallery(demoGallery))
-  .catch(() => renderGallery(demoGallery));
+fetch(`${API_URL}?route=page`)
+  .then((response) => response.ok ? response.json() : Promise.reject(new Error("Data halaman tidak tersedia")))
+  .then(renderPage)
+  .catch((error) => console.warn("Data halaman tidak dapat dimuat:", error));
 
 const form = document.getElementById("contact-form");
 const status = document.getElementById("form-status");

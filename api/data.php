@@ -15,6 +15,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $route = $_GET['route'] ?? 'profile';
 
 try {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && $route === 'page') {
+        $profile = db()->query('SELECT * FROM profile ORDER BY id DESC LIMIT 1')->fetch();
+        $contact = db()->query('SELECT * FROM contact_settings WHERE id = 1')->fetch();
+        $gallery = db()->query('SELECT id, title, description, image_url AS image FROM gallery WHERE is_published = 1 ORDER BY sort_order, id DESC')->fetchAll();
+        $contentRows = db()->query('SELECT content_key, content_value FROM site_content')->fetchAll();
+        $content = [];
+        foreach ($contentRows as $row) {
+            $content[$row['content_key']] = $row['content_value'];
+        }
+        echo json_encode([
+            'profile' => $profile ?: null,
+            'contact' => $contact ?: null,
+            'content' => $content,
+            'gallery' => $gallery,
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && $route === 'profile') {
         $profile = db()->query('SELECT * FROM profile ORDER BY id DESC LIMIT 1')->fetch();
         echo json_encode(['profile' => $profile ?: null], JSON_UNESCAPED_UNICODE);
