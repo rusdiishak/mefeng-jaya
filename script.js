@@ -7,6 +7,28 @@ const demoGallery = [
 
 document.getElementById("current-year").textContent = new Date().getFullYear();
 
+// Mencegah aksi inspeksi yang umum tanpa mengganggu input formulir.
+document.addEventListener("contextmenu", (event) => event.preventDefault());
+document.addEventListener("dragstart", (event) => event.preventDefault());
+document.addEventListener("selectstart", (event) => {
+  if (!(event.target instanceof Element)
+    || !event.target.closest("input, textarea, [contenteditable='true']")) {
+    event.preventDefault();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  const key = event.key.toLowerCase();
+  const isDevToolsShortcut = event.key === "F12"
+    || (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key))
+    || (event.ctrlKey && key === "u");
+
+  if (isDevToolsShortcut) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+});
+
 const menuToggle = document.querySelector(".menu-toggle");
 const navMenu = document.getElementById("site-menu");
 const messageCard = document.getElementById("messages");
