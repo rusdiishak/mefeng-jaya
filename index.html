@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Profil Yayasan Mefeng Jaya, yayasan yang bergerak di bidang pendidikan dan menaungi SMP Mefeng.">
+  <title>Yayasan Mefeng Jaya | Pendidikan untuk Masa Depan</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="alternate icon" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+  <header class="site-header">
+    <nav class="navbar container" aria-label="Navigasi utama">
+      <a class="brand" href="#home" aria-label="Yayasan Mefeng Jaya, halaman utama">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <span>Yayasan <strong>Mefeng Jaya</strong></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
+        <span class="sr-only">Buka menu</span>
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-menu" id="site-menu">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#contact">Contact</a>
+        <button class="nav-cta" type="button" data-scroll-to="messages">Kirim Pesan</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Membangun generasi berkarakter</p>
+          <h1>Pendidikan yang menyalakan <em>harapan.</em></h1>
+          <p class="hero-text" id="profile-description">Yayasan Mefeng Jaya hadir untuk membuka akses pendidikan yang bermakna, inklusif, dan berkelanjutan bagi anak-anak Indonesia.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#about">Kenali yayasan <span aria-hidden="true">→</span></a>
+            <button class="button button-ghost" type="button" data-scroll-to="messages">Hubungi kami</button>
+          </div>
+          <div class="hero-proof">
+            <span class="proof-icon" aria-hidden="true">✦</span>
+            <span><strong>Pendidikan</strong><br>untuk setiap langkah</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-label="Ilustrasi kegiatan belajar siswa" role="img">
+          <div class="art-circle"></div>
+          <div class="art-card art-card-top"><span aria-hidden="true">✎</span><b>Belajar</b><small>hari ini</small></div>
+          <div class="art-card art-card-bottom"><span aria-hidden="true">★</span><b>Berani</b><small>bermimpi</small></div>
+          <div class="art-person"><span class="person-head"></span><span class="person-body"></span></div>
+          <div class="art-book" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="hero-wave" aria-hidden="true"></div>
+    </section>
+
+    <section class="section about" id="about">
+      <div class="container about-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Tentang kami</p>
+          <h2>Menumbuhkan potensi,<br><em>menguatkan masa depan.</em></h2>
+        </div>
+        <div class="about-copy">
+          <p>Yayasan Mefeng Jaya bergerak di bidang pendidikan dengan semangat mendampingi generasi muda agar tumbuh menjadi pribadi yang cerdas, berkarakter, dan peduli terhadap sesama.</p>
+          <p>Melalui <strong>SMP Mefeng</strong>, kami menghadirkan lingkungan belajar yang aman, kreatif, dan mendorong setiap siswa untuk menemukan potensi terbaiknya.</p>
+          <a class="text-link" href="#contact">Pelajari lebih lanjut <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <div class="container stats" aria-label="Ringkasan yayasan">
+        <div class="stat"><strong>01</strong><span>Fokus pada pendidikan berkualitas</span></div>
+        <div class="stat"><strong>∞</strong><span>Ruang untuk setiap mimpi</span></div>
+        <div class="stat"><strong>1</strong><span>Komunitas belajar: SMP Mefeng</span></div>
+      </div>
+    </section>
+
+    <section class="section gallery-section" id="gallery">
+      <div class="container">
+        <div class="section-heading gallery-heading">
+          <div><p class="eyebrow">Cerita kami</p><h2>Momen yang <em>berarti.</em></h2></div>
+          <p>Setiap kegiatan adalah kesempatan untuk belajar, berbagi, dan bertumbuh bersama.</p>
+        </div>
+        <div class="gallery-grid" id="gallery-grid" aria-live="polite">
+          <article class="gallery-card gallery-card-large"><div class="gallery-placeholder placeholder-1"><span>Ruang kelas yang<br>penuh cerita</span></div><p>Belajar bersama di SMP Mefeng</p></article>
+          <article class="gallery-card"><div class="gallery-placeholder placeholder-2"><span>Berani<br>berkreasi</span></div><p>Kegiatan kreatif siswa</p></article>
+          <article class="gallery-card"><div class="gallery-placeholder placeholder-3"><span>Tumbuh<br>bersama</span></div><p>Komunitas yang saling mendukung</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="container contact-wrap">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <p class="eyebrow">Mari terhubung</p>
+            <h2>Setiap dukungan<br><em>berarti.</em></h2>
+            <p class="contact-intro" id="profile-tagline">Ingin mengetahui lebih banyak tentang program kami atau berkolaborasi? Kami senang mendengar dari Anda.</p>
+            <div class="contact-details">
+            <a class="contact-item" id="profile-email-link" href="mailto:halo@yayasanmefengjaya.or.id">
+                <span class="icon-badge"><i class="fa-solid fa-envelope"></i></span>
+              <span id="profile-email">halo@yayasanmefengjaya.or.id</span>
+              </a>
+            <a class="contact-item" id="profile-phone-link" href="tel:+6281234567890">
+                <span class="icon-badge"><i class="fa-solid fa-phone"></i></span>
+              <span id="profile-phone">+62 812 3456 7890</span>
+              </a>
+              <div class="contact-item">
+                <span class="icon-badge"><i class="fa-solid fa-location-dot"></i></span>
+              <span id="profile-address">Sumber Makmur, Kec. Gane Timur, Kabupaten Halmahera Selatan, Maluku Utara</span>
+              </div>
+            </div>
+            <div class="social-links" aria-label="Media sosial">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram Yayasan Mefeng Jaya"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook Yayasan Mefeng Jaya"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube Yayasan Mefeng Jaya"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="map-card" aria-label="Peta lokasi">
+            <div class="map-header">
+              <span class="map-pin"><i class="fa-solid fa-location-crosshairs"></i></span>
+              <div>
+                <small>Lokasi</small>
+                <strong>SMP Mefeng</strong>
+              </div>
+            </div>
+            <iframe
+              title="Peta lokasi SMP Mefeng"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1231.6248328080003!2d127.79250245369978!3d-0.08574403904851234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2d629b3d02fb909f%3A0x9e006d5f6fd2d1e0!2sSumber%20Makmur%2C%20Kec.%20Gane%20Tim.%2C%20Kabupaten%20Halmahera%20Selatan%2C%20Maluku%20Utara!5e1!3m2!1sid!2sid!4v1788933634868!5m2!1sid!2sid"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen>
+            ></iframe>
+          </div>
+        </div>
+        <div class="modal-backdrop" id="messages" hidden>
+          <div class="form-card contact-form" role="dialog" aria-modal="true" aria-labelledby="message-title">
+            <button class="modal-close" type="button" aria-label="Tutup formulir pesan">&times;</button>
+            <p class="eyebrow">Messages / Form kontak</p>
+            <h3 id="message-title">Kirim pesan kepada kami</h3>
+            <form id="contact-form" novalidate>
+              <label for="name">Nama lengkap</label>
+              <input id="name" name="name" type="text" autocomplete="name" minlength="2" maxlength="120" required>
+
+              <label for="email">Alamat email</label>
+              <input id="email" name="email" type="email" autocomplete="email" maxlength="190" required>
+
+              <label for="phone">Nomor telepon</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" pattern="^(?:\+62|62|0)8[0-9\s\-]{7,11}$" maxlength="20" required>
+
+              <label for="address">Alamat</label>
+              <input id="address" name="address" type="text" autocomplete="street-address" minlength="10" maxlength="255" required>
+
+              <label for="message">Pesan</label>
+              <textarea id="message" name="message" rows="4" minlength="20" maxlength="1000" required></textarea>
+
+              <button class="button button-primary" type="submit">Kirim pesan <span aria-hidden="true">→</span></button>
+              <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="current-year"></span> Yayasan Mefeng Jaya. Semua hak dilindungi.</p>
+      <a href="#home" class="footer-back">Kembali ke atas ↑</a>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
