@@ -77,7 +77,7 @@ SELECT
   'halo@yayasanmefengjaya.or.id',
   '+62 812 3456 7890',
   'Indonesia',
-  'https://www.google.com/maps',
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1231.6248328080003!2d127.79250245369978!3d-0.08574403904851234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2d629b3d02fb909f%3A0x9e006d5f6fd2d1e0!2sSumber%20Makmur%2C%20Kec.%20Gane%20Tim.%2C%20Kabupaten%20Halmahera%20Selatan%2C%20Maluku%20Utara!5e1!3m2!1sid!2sid!4v1788933634868!5m2!1sid!2sid',
   'https://instagram.com',
   'https://facebook.com',
   'https://youtube.com',
