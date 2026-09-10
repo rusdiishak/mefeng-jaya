@@ -105,12 +105,24 @@ function renderPage(page) {
   document.querySelector(".site-header nav").setAttribute("aria-label", content.nav_home || "");
   document.querySelector(".brand").setAttribute("aria-label", content.brand_name || "");
   document.querySelector(".hero-art").setAttribute("aria-label", content.hero_description || "");
+  const profileImage = document.getElementById("profile-image");
   document.querySelector(".social-links").setAttribute("aria-label", content.brand_name || "");
   document.querySelector(".map-card").setAttribute("aria-label", content.map_name || "");
   document.querySelector(".map-card iframe").title = content.map_name || "";
   document.querySelector(".modal-close").setAttribute("aria-label", content.nav_message || "");
 
   if (profile) {
+    if (profileImage) {
+      profileImage.alt = `Foto ${profile.name || "pendiri Yayasan Mefeng Jaya"}`;
+      if (profile.photo_url) {
+        profileImage.src = profile.photo_url;
+        profileImage.hidden = false;
+        document.querySelector(".hero-art").classList.add("has-profile-image");
+      } else {
+        profileImage.hidden = true;
+        document.querySelector(".hero-art").classList.remove("has-profile-image");
+      }
+    }
     document.getElementById("profile-description").textContent = profile.description || content.hero_description || "";
     document.getElementById("profile-tagline").textContent = profile.tagline || content.contact_intro || "";
     document.getElementById("profile-email").textContent = profile.email || contact.email || "";

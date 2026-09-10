@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS profile (
   phone VARCHAR(30),
   email VARCHAR(150),
   address VARCHAR(255),
+  photo_url VARCHAR(500),
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
@@ -53,8 +54,8 @@ CREATE TABLE IF NOT EXISTS site_content (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-INSERT INTO profile (name, tagline, description, phone, email, address)
-SELECT 'Yayasan Mefeng Jaya', 'Pendidikan yang menyalakan harapan.', 'Yayasan yang bergerak di bidang pendidikan dan menaungi SMP Mefeng.', '+62 812 3456 7890', 'halo@yayasanmefengjaya.or.id', 'Indonesia'
+INSERT INTO profile (name, tagline, description, phone, email, address, photo_url)
+SELECT 'Yayasan Mefeng Jaya', 'Pendidikan yang menyalakan harapan.', 'Yayasan yang bergerak di bidang pendidikan dan menaungi SMP Mefeng.', '+62 812 3456 7890', 'halo@yayasanmefengjaya.or.id', 'Indonesia', NULL
 WHERE NOT EXISTS (SELECT 1 FROM profile);
 
 INSERT INTO gallery (title, description, image_url, sort_order)
