@@ -1,10 +1,33 @@
 <?php
 declare(strict_types=1);
 
+function loadLocalEnvironment(): void
+{
+    $file = dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env';
+    if (!is_file($file)) {
+        return;
+    }
+
+    foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
+            continue;
+        }
+
+        [$key, $value] = explode('=', $line, 2);
+        $key = trim($key);
+        $value = trim($value);
+        if ($key !== '' && getenv($key) === false) {
+            putenv($key . '=' . trim($value, "\"'"));
+        }
+    }
+}
+
 function db(): PDO
 {
     static $pdo;
     if (!$pdo) {
+        loadLocalEnvironment();
         $host = getenv('MEFENG_DB_HOST');
         $name = getenv('MEFENG_DB_NAME');
         $user = getenv('MEFENG_DB_USER');
