@@ -11,6 +11,52 @@
 @media (max-width:991.98px){
   .gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+/* Bootstrap controls the responsive navbar state and collapse animation. */
+.site-header .navbar{background:transparent!important}
+.site-header .navbar-toggler{border-color:rgba(24,59,59,.25);padding:.5rem .65rem}
+.site-header .navbar-toggler:focus{box-shadow:0 0 0 .2rem rgba(13,92,90,.18)}
+.site-header .navbar-toggler-icon{
+  position:relative;
+  width:1.5rem;
+  height:1.5rem;
+  background-image:none;
+}
+.site-header .navbar-toggler-icon::before,
+.site-header .navbar-toggler-icon::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:1.5rem;
+  height:2px;
+  border-radius:999px;
+  background:var(--ink);
+  transition:transform .25s ease,top .25s ease;
+}
+.site-header .navbar-toggler-icon::before{top:.4rem;box-shadow:0 .35rem 0 var(--ink)}
+.site-header .navbar-toggler-icon::after{top:1.1rem}
+.site-header .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before{
+  top:.75rem;
+  transform:rotate(45deg);
+  box-shadow:none;
+}
+.site-header .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after{
+  top:.75rem;
+  transform:rotate(-45deg);
+}
+.site-header .navbar-nav{width:100%}
+@media (min-width:992px){
+  .site-header .nav-menu{width:auto;flex-grow:0!important}
+  .site-header .navbar-nav{width:auto;margin-left:auto}
+}
+@media (max-width:991.98px){
+  .site-header .nav-menu{display:block;opacity:1;visibility:visible;pointer-events:auto;transform:none;max-height:none;overflow:visible}
+  .site-header .nav-menu.collapse:not(.show):not(.collapsing){display:none}
+  .site-header .nav-menu.collapsing{display:block}
+  .site-header .navbar-nav{padding:1rem 0 .25rem;gap:.25rem!important}
+  .site-header .nav-item{width:100%}
+  .site-header .nav-link,.site-header .nav-cta{width:100%;text-align:left}
+}
 @media (max-width:767.98px){
   .gallery-grid{grid-template-columns:1fr}
 }
@@ -37,4 +83,36 @@ body.modal-open{overflow:hidden}
   .form-card{max-height:calc(100dvh - 1rem);margin-block:.5rem}
   .hero h1{max-width:100%;line-height:1.1}
   .hero-text{font-size:1rem}
+}
+
+/* Animate the actual hamburger bars; the first span is screen-reader text. */
+@media (max-width:991.98px){
+  .menu-toggle .menu-bar{
+    transform-origin:center;
+    transition:transform .25s ease,opacity .2s ease;
+  }
+  .menu-toggle[aria-expanded="true"] .menu-bar:nth-of-type(2){
+    transform:translateY(7px) rotate(45deg);
+  }
+  .menu-toggle[aria-expanded="true"] .menu-bar:nth-of-type(3){
+    opacity:0;
+  }
+  .menu-toggle[aria-expanded="true"] .menu-bar:last-of-type{
+    transform:translateY(-7px) rotate(-45deg);
+  }
+  .nav-menu{
+    display:flex;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transform:translateY(-10px);
+    transition:opacity .25s ease,transform .25s ease,visibility .25s ease;
+  }
+  .nav-menu.is-open{
+    display:flex;
+    opacity:1 !important;
+    visibility:visible !important;
+    pointer-events:auto !important;
+    transform:translateY(0) !important;
+  }
 }

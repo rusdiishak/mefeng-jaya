@@ -18,21 +18,22 @@
 <body>
   <a class="skip-link" id="skip-link" href="#main-content"></a>
   <header class="site-header">
-    <nav class="navbar navbar-expand-lg container-xxl px-3 px-lg-4" aria-label="">
-      <a class="brand" href="#home" aria-label="">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary container-xxl px-3 px-lg-4" aria-label="">
+      <a class="navbar-brand brand" href="#home" aria-label="">
         <span class="brand-mark" aria-hidden="true">M</span>
         <span data-content="brand_name"></span>
       </a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
-        <span class="sr-only" data-content="menu_open"></span>
-        <span></span><span></span><span></span>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#site-menu" aria-controls="site-menu" aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="nav-menu" id="site-menu">
-        <a href="#home" data-content="nav_home"></a>
-        <a href="#about" data-content="nav_about"></a>
-        <a href="#gallery" data-content="nav_gallery"></a>
-        <a href="#contact" data-content="nav_contact"></a>
-        <button class="nav-cta" type="button" data-scroll-to="messages" data-content="nav_message"></button>
+      <div class="collapse navbar-collapse nav-menu" id="site-menu">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+          <li class="nav-item"><a class="nav-link" href="#home" data-content="nav_home"></a></li>
+          <li class="nav-item"><a class="nav-link" href="#about" data-content="nav_about"></a></li>
+          <li class="nav-item"><a class="nav-link" href="#gallery" data-content="nav_gallery"></a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact" data-content="nav_contact"></a></li>
+          <li class="nav-item"><button class="nav-cta" type="button" data-scroll-to="messages" data-content="nav_message"></button></li>
+        </ul>
       </div>
     </nav>
   </header>

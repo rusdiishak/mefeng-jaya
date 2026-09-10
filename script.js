@@ -22,27 +22,26 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-const menuToggle = document.querySelector(".menu-toggle");
+const menuToggle = document.querySelector(".navbar-toggler");
 const navMenu = document.getElementById("site-menu");
 const messageCard = document.getElementById("messages");
 const triggerFormButtons = document.querySelectorAll('[data-scroll-to="messages"]');
 const closeFormButton = messageCard.querySelector(".modal-close");
 let lastFocusedElement;
 
-menuToggle.addEventListener("click", () => {
-  const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
-  menuToggle.setAttribute("aria-expanded", String(!isOpen));
-  navMenu.classList.toggle("is-open", !isOpen);
-});
-navMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
-  menuToggle.setAttribute("aria-expanded", "false");
-  navMenu.classList.remove("is-open");
-}));
+function closeNavigation() {
+  if (window.bootstrap) {
+    window.bootstrap.Collapse.getOrCreateInstance(navMenu).hide();
+  }
+}
+
+navMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeNavigation));
 
 function showMessageForm() {
   lastFocusedElement = document.activeElement;
   messageCard.hidden = false;
   document.body.classList.add("modal-open");
+  closeNavigation();
   const firstInput = messageCard.querySelector("input, textarea");
   if (firstInput) firstInput.focus();
 }
@@ -55,8 +54,6 @@ function hideMessageForm() {
 
 triggerFormButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    navMenu.classList.remove("is-open");
-    menuToggle.setAttribute("aria-expanded", "false");
     showMessageForm();
   });
 });
@@ -110,6 +107,7 @@ function renderPage(page) {
   document.querySelector(".map-card").setAttribute("aria-label", content.map_name || "");
   document.querySelector(".map-card iframe").title = content.map_name || "";
   document.querySelector(".modal-close").setAttribute("aria-label", content.nav_message || "");
+  document.querySelector(".navbar-toggler").setAttribute("aria-label", content.menu_open || "");
 
   if (profile) {
     if (profileImage) {
