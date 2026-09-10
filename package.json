@@ -1,0 +1,24 @@
+{
+  "name": "mefeng-jaya",
+  "version": "1.0.0",
+  "description": "Template portfolio berbahasa Indonesia menggunakan HTML, CSS, JavaScript vanilla, PHP, dan MySQL. Seluruh konten halaman dimuat dari database melalui API.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rusdiishak/mefeng-jaya.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rusdiishak/mefeng-jaya/issues"
+  },
+  "homepage": "https://github.com/rusdiishak/mefeng-jaya#readme",
+  "dependencies": {
+    "bootstrap": "5.3.8"
+  }
+}

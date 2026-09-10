@@ -13,3 +13,6 @@ Desktop.ini
 # Local runtime logs and temporary files
 *.log
 *.tmp
+
+# Installed npm dependencies
+node_modules/

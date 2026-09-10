@@ -10,24 +10,84 @@ Template portfolio berbahasa Indonesia menggunakan HTML, CSS, JavaScript vanilla
 4. Jika konfigurasi MySQL lokal berbeda, ubah konstanta di `api/config.php`. Nilai bawaan memakai user `root` tanpa password yang umum pada instalasi XAMPP baru; gunakan kredensial lokal Anda, bukan kredensial nyata.
 5. Buka `http://localhost/mefeng-jaya/`. Jangan membuka `index.html` langsung dari `file://` jika ingin menguji API PHP.
 
-## Struktur
-
-- `index.html` — kerangka halaman utama; teks dan data diisi dari database oleh JavaScript.
-- `styles.css` — desain responsif, aksesibel, serta animasi ringan pada link media sosial.
-- `script.js` — menu mobile, fetch profile/gallery dari database, modal, validasi, dan pengiriman form.
-- `api/config.php` — konfigurasi PDO lokal.
-- `api/data.php` — entry point API yang meneruskan request ke controller.
-- `app/Controllers/` — controller untuk halaman dan penyimpanan pesan.
-- `app/Models/` — query database untuk profile, gallery, contact settings, site content, dan messages.
-- `app/Core/` — exception validasi yang digunakan lintas controller.
-- `schema.sql` — schema dan data awal database phpMyAdmin, termasuk tabel `site_content`.
-
-Ubah teks halaman pada tabel `site_content`, data kontak dan tautan media sosial pada tabel `contact_settings`, serta data galeri pada tabel `gallery`.
-
 ## Struktur MVC
 
-Backend menggunakan MVC ringan tanpa framework. `api/data.php` berfungsi sebagai
-front controller yang mempertahankan endpoint lama, controller menangani alur
-request, dan model menangani query database. View tetap berada di `index.html`
-dan mengambil data dari API melalui `script.js`, sehingga refactor backend tidak
-mengubah URL frontend yang sudah ada.
+Project ini menggunakan MVC ringan tanpa framework PHP. Berikut struktur utamanya:
+
+```text
+mefeng-jaya/
+├── index.html                  # VIEW: template halaman utama
+├── styles.css                  # VIEW: styling dan responsive layout
+├── script.js                   # VIEW: interaksi browser dan pemanggilan API
+├── api/
+│   ├── data.php                # CONTROLLER/route entry point untuk API
+│   └── config.php              # konfigurasi koneksi database API
+├── app/
+│   ├── Controllers/             # CONTROLLER: alur request dan response
+│   │   ├── PageController.php
+│   │   └── MessageController.php
+│   ├── Models/                 # MODEL: query dan akses data database
+│   │   ├── Profile.php
+│   │   ├── Gallery.php
+│   │   ├── ContactSetting.php
+│   │   ├── SiteContent.php
+│   │   └── Message.php
+│   └── Core/                    # komponen inti bersama
+│       └── ValidationException.php
+├── assets/
+│   └── bootstrap/               # Bootstrap 5.3.8 lokal
+├── schema.sql                   # struktur dan data awal database
+└── data.php                     # endpoint lama; tidak dipakai frontend aktif
+```
+
+### View
+
+View adalah tampilan yang dilihat pengguna. Pada project ini view tidak memakai
+template PHP, melainkan HTML/CSS/JavaScript:
+
+- `index.html` — struktur halaman Home, About, Gallery, Contact, dan form pesan.
+- `styles.css` — tampilan, breakpoint mobile/tablet/laptop/desktop, dan layout Gallery.
+- `script.js` — menu mobile, pengambilan data API, render Gallery, modal, validasi,
+  dan pengiriman form.
+
+### Controller
+
+Controller menerima request, memanggil model, lalu mengembalikan response:
+
+- `api/data.php` — entry point API aktif yang membaca `route` dan meneruskan
+  request ke controller.
+- `app/Controllers/PageController.php` — menggabungkan data profile, kontak,
+  konten halaman, dan gallery.
+- `app/Controllers/MessageController.php` — memvalidasi dan menyimpan pesan
+  kontak baru.
+
+### Model
+
+Model berisi query database dan tidak mengatur tampilan:
+
+- `app/Models/Profile.php` — data profile yayasan.
+- `app/Models/Gallery.php` — daftar gambar gallery yang dipublikasikan.
+- `app/Models/ContactSetting.php` — email, telepon, alamat, media sosial, dan peta.
+- `app/Models/SiteContent.php` — teks halaman yang dapat diubah dari database.
+- `app/Models/Message.php` — penyimpanan pesan dari form kontak.
+
+### Alur request
+
+```text
+Browser (index.html + script.js)
+        ↓
+api/data.php
+        ↓
+Controller
+        ↓
+Model
+        ↓
+MySQL
+```
+
+`data.php` di root adalah endpoint versi lama yang dipertahankan untuk
+kompatibilitas. Frontend aktif menggunakan `api/data.php`, sehingga kode baru
+sebaiknya ditambahkan ke `app/Controllers/` dan `app/Models/`, bukan ke
+`data.php` root.
+
+Ubah teks halaman pada tabel `site_content`, data kontak dan tautan media sosial pada tabel `contact_settings`, serta data galeri pada tabel `gallery`.
