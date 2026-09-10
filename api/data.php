@@ -1,7 +1,30 @@
 <?php
 declare(strict_types=1);
 
+use App\Controllers\MessageController;
+use App\Controllers\PageController;
+use App\Core\ValidationException;
+use App\Models\ContactSetting;
+use App\Models\Gallery;
+use App\Models\Message;
+use App\Models\Profile;
+use App\Models\SiteContent;
+
 require __DIR__ . '/config.php';
+
+spl_autoload_register(static function (string $class): void {
+    $prefix = 'App\\';
+    if (strncmp($class, $prefix, strlen($prefix)) !== 0) {
+        return;
+    }
+
+    $relativeClass = substr($class, strlen($prefix));
+    $file = dirname(__DIR__) . '/app/' . str_replace('\\', '/', $relativeClass) . '.php';
+    if (is_file($file)) {
+        require $file;
+    }
+});
+
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
@@ -12,86 +35,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-$route = $_GET['route'] ?? 'profile';
+function respond(array $payload, int $status = 200): void
+{
+    http_response_code($status);
+    echo json_encode($payload, JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+function requestInput(): array
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        return [];
+    }
+
+    $body = file_get_contents('php://input');
+    if ($body === false || $body === '') {
+        return $_POST;
+    }
+
+    $input = json_decode($body, true);
+    if (!is_array($input)) {
+        respond(['message' => 'Format data permintaan tidak valid.'], 400);
+    }
+
+    return $input;
+}
 
 try {
+    $database = db();
+    $pageController = new PageController(
+        new Profile($database),
+        new ContactSetting($database),
+        new SiteContent($database),
+        new Gallery($database)
+    );
+    $route = $_GET['route'] ?? 'profile';
+
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && $route === 'page') {
-        $profile = db()->query('SELECT * FROM profile ORDER BY id DESC LIMIT 1')->fetch();
-        $contact = db()->query('SELECT * FROM contact_settings WHERE id = 1')->fetch();
-        $gallery = db()->query('SELECT id, title, description, image_url AS image FROM gallery WHERE is_published = 1 ORDER BY sort_order, id DESC')->fetchAll();
-        $contentRows = db()->query('SELECT content_key, content_value FROM site_content')->fetchAll();
-        $content = [];
-        foreach ($contentRows as $row) {
-            $content[$row['content_key']] = $row['content_value'];
-        }
-        echo json_encode([
-            'profile' => $profile ?: null,
-            'contact' => $contact ?: null,
-            'content' => $content,
-            'gallery' => $gallery,
-        ], JSON_UNESCAPED_UNICODE);
-        exit;
+        respond($pageController->page());
     }
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && $route === 'profile') {
-        $profile = db()->query('SELECT * FROM profile ORDER BY id DESC LIMIT 1')->fetch();
-        echo json_encode(['profile' => $profile ?: null], JSON_UNESCAPED_UNICODE);
-        exit;
+        respond($pageController->profile());
     }
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && $route === 'gallery') {
-        $gallery = db()->query('SELECT id, title, description, image_url AS image FROM gallery WHERE is_published = 1 ORDER BY sort_order, id DESC')->fetchAll();
-        echo json_encode(['gallery' => $gallery], JSON_UNESCAPED_UNICODE);
-        exit;
+        respond($pageController->gallery());
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && $route === 'messages') {
-        $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
-        $name = trim((string)($input['name'] ?? ''));
-        $email = trim((string)($input['email'] ?? ''));
-        $phone = trim((string)($input['phone'] ?? ''));
-        $address = trim((string)($input['address'] ?? ''));
-        $message = trim((string)($input['message'] ?? ''));
-
-        if (!preg_match('/^[\p{L}\p{M}][\p{L}\p{M}\s.\'-]{1,119}$/u', $name)) {
-            http_response_code(422);
-            echo json_encode(['message' => 'Nama lengkap minimal 2 karakter.'], JSON_UNESCAPED_UNICODE);
-            exit;
-        }
-        if (strlen($email) > 190 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            http_response_code(422);
-            echo json_encode(['message' => 'Format email tidak valid.'], JSON_UNESCAPED_UNICODE);
-            exit;
-        }
-        if (!preg_match('/^(?:\+62|62|0)8[0-9\s-]{7,11}$/', $phone) || strlen(preg_replace('/\D/', '', $phone)) < 10) {
-            http_response_code(422);
-            echo json_encode(['message' => 'Nomor telepon tidak valid.'], JSON_UNESCAPED_UNICODE);
-            exit;
-        }
-        if (strlen($address) < 10 || strlen($address) > 255 || preg_match('/[\x00-\x1F\x7F]/', $address)) {
-            http_response_code(422);
-            echo json_encode(['message' => 'Alamat minimal 10 karakter.'], JSON_UNESCAPED_UNICODE);
-            exit;
-        }
-        if (strlen($message) < 20 || strlen($message) > 1000 || preg_match('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $message)) {
-            http_response_code(422);
-            echo json_encode(['message' => 'Pesan minimal 20 karakter.'], JSON_UNESCAPED_UNICODE);
-            exit;
-        }
-
-        $statement = db()->prepare('INSERT INTO messages (name, email, phone, address, message) VALUES (:name, :email, :phone, :address, :message)');
-        $statement->execute([
-            'name' => $name,
-            'email' => $email,
-            'phone' => $phone,
-            'address' => $address,
-            'message' => $message,
-        ]);
-
-        http_response_code(201);
-        echo json_encode(['message' => 'Terima kasih. Pesan Anda telah diterima dan disimpan ke database.'], JSON_UNESCAPED_UNICODE);
-        exit;
+        (new MessageController(new Message($database)))->store(requestInput());
+        respond(['message' => 'Terima kasih. Pesan Anda telah diterima dan disimpan ke database.'], 201);
     }
-    http_response_code(404);
-    echo json_encode(['message' => 'Rute API tidak ditemukan.'], JSON_UNESCAPED_UNICODE);
+
+    respond(['message' => 'Rute API tidak ditemukan.'], 404);
+} catch (ValidationException $error) {
+    respond(['message' => $error->getMessage()], 422);
 } catch (PDOException $error) {
-    http_response_code(503);
-    echo json_encode(['message' => 'Database belum tersedia. Jalankan schema.sql terlebih dahulu.'], JSON_UNESCAPED_UNICODE);
+    respond(['message' => 'Database belum tersedia. Jalankan schema.sql terlebih dahulu.'], 503);
 }
