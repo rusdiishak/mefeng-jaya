@@ -81,6 +81,7 @@ function renderGallery(items) {
 
 function renderPage(page) {
   const { content, profile, contact, gallery } = page;
+  window.csrfToken = page.csrf_token || "";
   Object.entries(content).forEach(([key, value]) => {
     document.querySelectorAll(`[data-content="${key}"]`).forEach((element) => {
       element.innerHTML = value;
@@ -223,7 +224,10 @@ form.addEventListener("submit", async (event) => {
   try {
     const response = await fetch(`${API_URL}?route=messages`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": window.csrfToken || ""
+      },
       body: JSON.stringify(Object.fromEntries(new FormData(form).entries()))
     });
 

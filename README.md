@@ -7,8 +7,10 @@ Template portfolio berbahasa Indonesia menggunakan HTML, CSS, JavaScript vanilla
 1. Salin folder proyek ini ke `C:\xampp\htdocs\mefeng-jaya`.
 2. Jalankan **Apache** dan **MySQL** dari XAMPP Control Panel.
 3. Buka `http://localhost/phpmyadmin`, buat/import database dengan memilih file `schema.sql`. Schema membuat database `mefeng_jaya` beserta tabel `profile`, `gallery`, dan `messages`.
-4. Jika konfigurasi MySQL lokal berbeda, ubah konstanta di `api/config.php`. Nilai bawaan memakai user `root` tanpa password yang umum pada instalasi XAMPP baru; gunakan kredensial lokal Anda, bukan kredensial nyata.
+4. Atur variabel `MEFENG_DB_HOST`, `MEFENG_DB_NAME`, `MEFENG_DB_USER`, dan `MEFENG_DB_PASS` melalui environment Apache/PHP atau panel hosting. Gunakan user database khusus aplikasi, bukan `root`. Lihat `.env.example` sebagai referensi nama variabel.
 5. Buka `http://localhost/mefeng-jaya/`. Jangan membuka `index.html` langsung dari `file://` jika ingin menguji API PHP.
+
+Jangan mengunggah file backup SQL ke document root. Simpan backup di luar folder website atau gunakan penyimpanan backup dari hosting.
 
 ## Struktur MVC
 
@@ -37,7 +39,8 @@ mefeng-jaya/
 ├── assets/
 │   └── bootstrap/               # Bootstrap 5.3.8 lokal
 ├── schema.sql                   # struktur dan data awal database
-└── data.php                     # endpoint lama; tidak dipakai frontend aktif
+├── .env.example                 # contoh nama variabel environment
+└── .htaccess                    # hardening Apache dasar
 ```
 
 ### View
@@ -85,9 +88,12 @@ Model
 MySQL
 ```
 
-`data.php` di root adalah endpoint versi lama yang dipertahankan untuk
-kompatibilitas. Frontend aktif menggunakan `api/data.php`, sehingga kode baru
-sebaiknya ditambahkan ke `app/Controllers/` dan `app/Models/`, bukan ke
-`data.php` root.
+Frontend aktif menggunakan `api/data.php`. Endpoint lama di root telah
+dihapus agar tidak ada jalur API duplikat dengan konfigurasi keamanan berbeda.
+Kode baru sebaiknya ditambahkan ke `app/Controllers/` dan `app/Models/`.
+
+Endpoint pesan menggunakan token CSRF berbasis session, validasi origin, dan
+honeypot anti-spam. Untuk production, gunakan HTTPS dan aktifkan kredensial
+database melalui panel hosting, bukan melalui file yang di-commit.
 
 Ubah teks halaman pada tabel `site_content`, data kontak dan tautan media sosial pada tabel `contact_settings`, serta data galeri pada tabel `gallery`.

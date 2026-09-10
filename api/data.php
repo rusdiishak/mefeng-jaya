@@ -12,6 +12,14 @@ use App\Models\SiteContent;
 
 require __DIR__ . '/config.php';
 
+ini_set('session.use_strict_mode', '1');
+session_set_cookie_params([
+    'httponly' => true,
+    'samesite' => 'Lax',
+    'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+]);
+session_start();
+
 spl_autoload_register(static function (string $class): void {
     $prefix = 'App\\';
     if (strncmp($class, $prefix, strlen($prefix)) !== 0) {
@@ -26,12 +34,48 @@ spl_autoload_register(static function (string $class): void {
 });
 
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+
+function csrfToken(): string
+{
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+
+    return $_SESSION['csrf_token'];
+}
+
+function validateRequestOrigin(): void
+{
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    if ($origin === '') {
+        return;
+    }
+
+    $expected = (($_SERVER['HTTPS'] ?? 'off') !== 'off' ? 'https' : 'http')
+        . '://' . ($_SERVER['HTTP_HOST'] ?? '');
+    if (!hash_equals($expected, $origin)) {
+        respond(['message' => 'Sumber permintaan tidak diizinkan.'], 403);
+    }
+}
+
+function validateCsrfToken(): void
+{
+    $submitted = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+    if (!is_string($submitted) || !hash_equals((string)($_SESSION['csrf_token'] ?? ''), $submitted)) {
+        respond(['message' => 'Token keamanan tidak valid. Muat ulang halaman lalu coba lagi.'], 403);
+    }
+}
+
+function validateMessageRate(): void
+{
+    $lastMessageAt = (int)($_SESSION['last_message_at'] ?? 0);
+    if ($lastMessageAt > 0 && time() - $lastMessageAt < 15) {
+        respond(['message' => 'Tunggu beberapa detik sebelum mengirim pesan lagi.'], 429);
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
+    http_response_code(405);
     exit;
 }
 
@@ -72,7 +116,9 @@ try {
     $route = $_GET['route'] ?? 'profile';
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && $route === 'page') {
-        respond($pageController->page());
+        $page = $pageController->page();
+        $page['csrf_token'] = csrfToken();
+        respond($page);
     }
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && $route === 'profile') {
         respond($pageController->profile());
@@ -81,13 +127,23 @@ try {
         respond($pageController->gallery());
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && $route === 'messages') {
-        (new MessageController(new Message($database)))->store(requestInput());
+        validateRequestOrigin();
+        validateCsrfToken();
+        validateMessageRate();
+        $input = requestInput();
+        if (!empty($input['website'])) {
+            respond(['message' => 'Permintaan tidak valid.'], 422);
+        }
+        (new MessageController(new Message($database)))->store($input);
+        $_SESSION['last_message_at'] = time();
         respond(['message' => 'Terima kasih. Pesan Anda telah diterima dan disimpan ke database.'], 201);
     }
 
     respond(['message' => 'Rute API tidak ditemukan.'], 404);
 } catch (ValidationException $error) {
     respond(['message' => $error->getMessage()], 422);
+} catch (RuntimeException $error) {
+    respond(['message' => 'Konfigurasi server belum lengkap.'], 503);
 } catch (PDOException $error) {
     respond(['message' => 'Database belum tersedia. Jalankan schema.sql terlebih dahulu.'], 503);
 }
