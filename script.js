@@ -123,13 +123,16 @@ function renderPage(page) {
     }
     document.getElementById("profile-description").textContent = profile.description || content.hero_description || "";
     document.getElementById("profile-tagline").textContent = profile.tagline || content.contact_intro || "";
-    document.getElementById("profile-email").textContent = profile.email || contact.email || "";
-    document.getElementById("profile-phone").textContent = profile.phone || contact.phone || "";
-    document.getElementById("profile-address").textContent = profile.address || contact.address || "";
-    document.getElementById("profile-email-link").href = `mailto:${profile.email || contact.email || ""}`;
-    document.getElementById("profile-phone-link").href = `tel:${(profile.phone || contact.phone || "").replace(/[^\d+]/g, "")}`;
   }
   if (contact) {
+    const email = contact.email || profile?.email || "";
+    const phone = contact.phone || profile?.phone || "";
+    const address = contact.address || profile?.address || "";
+    document.getElementById("profile-email").textContent = email;
+    document.getElementById("profile-phone").textContent = phone;
+    document.getElementById("profile-address").textContent = address;
+    document.getElementById("profile-email-link").href = `mailto:${email}`;
+    document.getElementById("profile-phone-link").href = `tel:${phone.replace(/[^\d+]/g, "")}`;
     document.getElementById("instagram-link").href = contact.instagram_url || "";
     document.getElementById("facebook-link").href = contact.facebook_url || "";
     document.getElementById("youtube-link").href = contact.youtube_url || "";
