@@ -120,3 +120,12 @@ body.modal-open{overflow:hidden}
     transform:translateY(0) !important;
   }
 }
+
+@media (max-width:991.98px){
+  .gallery-image,
+  .gallery-card-large .gallery-image{
+    object-fit:contain;
+    object-position:center;
+    background:#dfeee8;
+  }
+}
