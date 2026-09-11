@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 function loadLocalEnvironment(): void
 {
-    $file = dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env';
+    $configuredFile = getenv('MEFENG_ENV_FILE');
+    $file = $configuredFile !== false && $configuredFile !== ''
+        ? $configuredFile
+        : dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . '.env';
     if (!is_file($file)) {
         return;
     }

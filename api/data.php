@@ -13,10 +13,17 @@ use App\Models\SiteContent;
 require __DIR__ . '/config.php';
 
 ini_set('session.use_strict_mode', '1');
+$isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+if (getenv('MEFENG_FORCE_HTTPS') === '1' && !$isHttps) {
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+    $uri = $_SERVER['REQUEST_URI'] ?? '/';
+    header('Location: https://' . $host . $uri, true, 308);
+    exit;
+}
 session_set_cookie_params([
     'httponly' => true,
     'samesite' => 'Lax',
-    'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+    'secure' => $isHttps || getenv('MEFENG_FORCE_HTTPS') === '1',
 ]);
 session_start();
 
@@ -34,6 +41,11 @@ spl_autoload_register(static function (string $class): void {
 });
 
 header('Content-Type: application/json; charset=utf-8');
+header('X-Content-Type-Options: nosniff');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+if ($isHttps) {
+    header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+}
 
 function csrfToken(): string
 {

@@ -1,5 +1,12 @@
 Options -Indexes
 
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{ENV:MEFENG_FORCE_HTTPS} =1
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=308,L]
+</IfModule>
+
 <FilesMatch "^(?:\.|.*\.(?:sql|sqlite|env|ini|log|bak|backup|old))$">
     Require all denied
 </FilesMatch>

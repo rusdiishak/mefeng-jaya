@@ -7,10 +7,18 @@ Template portfolio berbahasa Indonesia menggunakan HTML, CSS, JavaScript vanilla
 1. Salin folder proyek ini ke `C:\xampp\htdocs\mefeng-jaya`.
 2. Jalankan **Apache** dan **MySQL** dari XAMPP Control Panel.
 3. Buka `http://localhost/phpmyadmin`, buat/import database dengan memilih file `schema.sql`. Schema membuat database `mefeng_jaya` beserta tabel `profile`, `gallery`, dan `messages`.
-4. Atur variabel `MEFENG_DB_HOST`, `MEFENG_DB_NAME`, `MEFENG_DB_USER`, dan `MEFENG_DB_PASS` melalui environment Apache/PHP atau panel hosting. Gunakan user database khusus aplikasi, bukan `root`. Lihat `.env.example` sebagai referensi nama variabel.
+4. Atur variabel `MEFENG_DB_HOST`, `MEFENG_DB_NAME`, `MEFENG_DB_USER`, dan `MEFENG_DB_PASS` melalui environment Apache/PHP atau panel hosting. Gunakan user database khusus aplikasi, bukan `root`. Lihat `.env.example` sebagai referensi nama variabel. Jangan menyimpan `.env` di document root; untuk instalasi lokal, simpan di folder induk proyek atau tetapkan `MEFENG_ENV_FILE` ke lokasi absolut di luar document root.
 5. Buka `http://localhost/mefeng-jaya/`. Jangan membuka `index.html` langsung dari `file://` jika ingin menguji API PHP.
 
-Jangan mengunggah file backup SQL ke document root. Simpan backup di luar folder website atau gunakan penyimpanan backup dari hosting.
+Jangan mengunggah file backup SQL, `.env`, atau file konfigurasi ke document root. Simpan backup di luar folder website atau gunakan penyimpanan backup dari hosting.
+
+### Preview lokal
+
+Task **Start PHP Preview** menjalankan `router.php`, yang memblokir akses ke file tersembunyi, `.env`, dan file backup. Preview ini hanya untuk pengembangan lokal; jangan gunakan PHP built-in server sebagai server produksi.
+
+### Deployment produksi
+
+Aktifkan HTTPS di reverse proxy atau Apache, lalu set environment `MEFENG_FORCE_HTTPS=1`. Aplikasi akan mengarahkan HTTP ke HTTPS, mengaktifkan cookie Secure, dan mengirim HSTS saat koneksi HTTPS. Gunakan user database khusus aplikasi dan simpan semua kredensial di environment hosting, bukan di repository.
 
 ## Struktur MVC
 

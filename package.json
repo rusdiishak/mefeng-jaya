@@ -4,7 +4,7 @@
   "description": "Template portfolio berbahasa Indonesia menggunakan HTML, CSS, JavaScript vanilla, PHP, dan MySQL. Seluruh konten halaman dimuat dari database melalui API.",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "php -l api/config.php && php -l api/data.php && php -l app/Controllers/MessageController.php && php -l app/Controllers/PageController.php && php -l app/Core/ValidationException.php && php -l app/Models/ContactSetting.php && php -l app/Models/Gallery.php && php -l app/Models/Message.php && php -l app/Models/Profile.php && php -l app/Models/SiteContent.php"
   },
   "repository": {
     "type": "git",
